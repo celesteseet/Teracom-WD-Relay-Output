@@ -1,0 +1,791 @@
+TERACOM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE, enterprises, IpAddress, Integer32, snmpModules 		
+															FROM SNMPv2-SMI
+	MacAddress, DisplayString								FROM SNMPv2-TC
+--	TEXTUAL-CONVENTION										FROM SNMPv2-TC
+	MODULE-COMPLIANCE, OBJECT-GROUP , NOTIFICATION-GROUP      						
+															FROM SNMPv2-CONF;
+															
+snmpMIB MODULE-IDENTITY
+    LAST-UPDATED "202205200000Z"
+	ORGANIZATION "TERACOM"
+	CONTACT-INFO
+			"EMail:	info@teracomsystems.com"
+	DESCRIPTION
+			"The MIB module for TCW122B-WD SNMP entities."
+	REVISION      "202205200000Z"
+	DESCRIPTION
+			"TCW122B-WDv3.10"
+	::= { snmpModules 1 }
+
+teracom                           	OBJECT IDENTIFIER ::=  { enterprises 38783 }
+trapNotifications 					OBJECT IDENTIFIER ::=  { teracom 0 }
+product                          	OBJECT IDENTIFIER ::=  { teracom 1 }
+setup                            	OBJECT IDENTIFIER ::=  { teracom 2 }
+monitorNcontrol                  	OBJECT IDENTIFIER ::=  { teracom 3 }
+tcw122bMIBConformance			 	OBJECT IDENTIFIER ::=  { teracom 4 }
+
+tcw122bMIBCompliances         		OBJECT IDENTIFIER ::= { tcw122bMIBConformance 1 }
+tcw122bMIBGroups  					OBJECT IDENTIFIER ::= { tcw122bMIBConformance 2 }
+
+name    OBJECT-TYPE
+   SYNTAX DisplayString
+   MAX-ACCESS read-only
+   STATUS current
+   DESCRIPTION
+      "Name of product. e.g. teracomsystems.com etc."
+   ::= { product 1 }
+   
+
+version    OBJECT-TYPE
+   SYNTAX DisplayString
+   MAX-ACCESS read-only
+   STATUS current
+   DESCRIPTION
+      "Version string. e.g. 1.0"
+   ::= { product 2 }
+   
+date    OBJECT-TYPE
+   SYNTAX DisplayString
+   MAX-ACCESS read-only
+   STATUS current
+   DESCRIPTION
+      "Date of version"
+   ::= { product 3 }
+
+--MACfilter1                            OBJECT IDENTIFIER ::=  { MACfilters 1 }
+--MACfilter2                            OBJECT IDENTIFIER ::=  { MACfilters 2 }
+--MACfilter3                            OBJECT IDENTIFIER ::=  { MACfilters 3 }
+--SMTPsetup                             OBJECT IDENTIFIER ::=  { network 7 }
+--VlanSetup                             OBJECT IDENTIFIER ::=  { network 8 }
+
+network                             	OBJECT IDENTIFIER ::=  { setup 1 }
+vlan                             		OBJECT IDENTIFIER ::=  { setup 2 }
+macFilter                             	OBJECT IDENTIFIER ::=  { setup 3 }
+snmp                             		OBJECT IDENTIFIER ::=  { setup 4 }
+oneWireSensor1                          OBJECT IDENTIFIER ::=  { setup 5 }
+oneWireSensor2                          OBJECT IDENTIFIER ::=  { setup 6 }
+analogInput                        		OBJECT IDENTIFIER ::=  { setup 7 }
+relay	                        		OBJECT IDENTIFIER ::=  { setup 9 }
+watchdog1	                        	OBJECT IDENTIFIER ::=  { setup 10 }
+watchdog2	                        	OBJECT IDENTIFIER ::=  { setup 11 }
+
+
+deviceIPAddress OBJECT-TYPE
+    SYNTAX  IpAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Device IP address"
+    ::= { network 1 }
+
+
+subnetMask OBJECT-TYPE
+    SYNTAX  IpAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Subnet Mask"
+    ::= { network 2 }
+
+gateway OBJECT-TYPE
+    SYNTAX  IpAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Gateway IP address"
+    ::= { network 3 }
+
+deviceMACAddress OBJECT-TYPE
+    SYNTAX  MacAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Device MAC address"
+    ::= { network 4 }
+
+dhcpConfig OBJECT-TYPE
+    SYNTAX  INTEGER { off(0), on(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "DHCP configuration ON/OFF"
+    ::= { network 5 }
+
+dns OBJECT-TYPE
+    SYNTAX  IpAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Domain Name Server Address"
+    ::= { network 6 }
+
+hostName  OBJECT-TYPE
+    SYNTAX  DisplayString (SIZE (0..38))
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+        "Host Name"
+    ::= { network 7 }
+
+filterMACAddress1 OBJECT-TYPE
+    SYNTAX  MacAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "filter1 MAC address"
+    ::= { macFilter 1 }
+
+filterMACEnable1 OBJECT-TYPE
+    SYNTAX INTEGER { disabled(0), enabled(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "MAC filter 1 Enable ENABLED/DISABLED"
+    ::= { macFilter 2  }
+	
+filterMACAddress2 OBJECT-TYPE
+    SYNTAX  MacAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "filter2 MAC address"
+    ::= { macFilter 3 }
+	
+filterMACEnable2 OBJECT-TYPE
+    SYNTAX INTEGER { disabled(0), enabled(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "MAC filter 2 Enable ENABLED/DISABLED"
+    ::= { macFilter 4 }
+
+filterMACAddress3 OBJECT-TYPE
+    SYNTAX  MacAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "filter3 MAC address"
+    ::= { macFilter 5 }
+
+filterMACEnable3 OBJECT-TYPE
+    SYNTAX INTEGER { disabled(0), enabled(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "MAC filter 3 Enable ENABLED/DISABLED"
+    ::= { macFilter 6 }
+
+vlanStatus OBJECT-TYPE
+    SYNTAX INTEGER { disabled(0), enabled(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "VLAN Status ENABLED/DISABLED"
+    ::= { vlan 1 }
+
+vlanId OBJECT-TYPE
+    SYNTAX Integer32 (0..4095)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "VLAN ID (0-4095)"
+    ::= { vlan 2 }
+	
+
+--trapSetup                               OBJECT IDENTIFIER ::=  { SNMPSetup 1}
+--voltage1range                               OBJECT IDENTIFIER ::=  { trapSetup 8}
+--meratureRange                               OBJECT IDENTIFIER ::=  { trapSetup 10}
+
+snmpConfiguration OBJECT-TYPE
+    SYNTAX INTEGER { disabled(0), enabled(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "SNMP Configuration ENABLED/DISABLED"
+    ::= { snmp 1 }
+	
+trapEnabled OBJECT-TYPE
+    SYNTAX INTEGER {  no(0), yes(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+        "Indicates if this trap entry is enabled or not."
+    ::= { snmp 2 }
+
+trapReceiverIPAddress OBJECT-TYPE
+    SYNTAX  IpAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Trap receiver IP address"
+    ::= { snmp 3 }
+
+trapCommunity OBJECT-TYPE
+    SYNTAX  DisplayString (SIZE (0..13))
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Trap community to be used by agent to send trap"
+    ::= { snmp 4 }
+
+trapInterval OBJECT-TYPE
+    SYNTAX Integer32 (1..253)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Trap Interval"
+    ::= { snmp 5 }
+
+maxNumberOfTraps OBJECT-TYPE
+    SYNTAX Integer32 (1..253)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Max Number of Traps"
+    ::= { snmp 6 }
+
+temperature1                           		OBJECT IDENTIFIER ::=  { oneWireSensor1 1 }
+
+temperature1Min OBJECT-TYPE
+    SYNTAX Integer32 (-400..1250)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Temperature1 minimum x10 in Integer format"
+    ::= { temperature1 1 }
+	
+temperature1Max OBJECT-TYPE
+    SYNTAX Integer32 (-400..1250)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Temperature1 maximum x10 in Integer format"
+    ::= { temperature1 2 }
+
+temperature1Hyst OBJECT-TYPE
+    SYNTAX Integer32 (0..1250)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Temperature1 hysteresis x10 in Integer format"
+    ::= { temperature1 3 }
+
+humidity1                          		OBJECT IDENTIFIER ::=  { oneWireSensor1 2 }
+
+humidity1Min OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Humidity1 minimum x10 in Integer format"
+    ::= { humidity1 1 }
+
+humidity1Max OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Humidity1 maximum x10 in Integer format"
+    ::= { humidity1 2 }
+	
+humidity1Hyst OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Humidity1 hysteresis x10 in Integer format"
+    ::= { humidity1 3 }
+
+temperature2                           		OBJECT IDENTIFIER ::=  { oneWireSensor2 1 }
+
+temperature2Min OBJECT-TYPE
+    SYNTAX Integer32 (-400..1250)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Temperature2 minimum x10 in Integer format"
+    ::= { temperature2 1 }
+	
+temperature2Max OBJECT-TYPE
+    SYNTAX Integer32 (-400..1250)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Temperature2 maximum x10 in Integer format"
+    ::= { temperature2 2 }
+
+temperature2Hyst OBJECT-TYPE
+    SYNTAX Integer32 (0..1250)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Temperature2 hysteresis x10 in Integer format"
+    ::= { temperature2 3 }
+
+humidity2                          		OBJECT IDENTIFIER ::=  { oneWireSensor2 2 }
+
+humidity2Min OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Humidity2 minimum x10 in Integer format"
+    ::= { humidity2 1 }
+
+humidity2Max OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Humidity2 maximum x10 in Integer format"
+    ::= { humidity2 2 }
+	
+humidity2Hyst OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Humidity2 hysteresis x10 in Integer format"
+    ::= { humidity2 3 }
+
+input1                        		OBJECT IDENTIFIER ::=  { analogInput 1 }
+input2                        		OBJECT IDENTIFIER ::=  { analogInput 2 }
+
+voltage1Min OBJECT-TYPE
+    SYNTAX Integer32 (0..600)
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Voltage1 minimum x10 in Integer format"
+    ::= { input1 1 }
+	
+voltage1Max OBJECT-TYPE
+    SYNTAX Integer32 (0..600)
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Voltage1 maximum x10 in Integer format"
+    ::= { input1 2 }
+
+voltage1Hyst OBJECT-TYPE
+    SYNTAX Integer32 (0..600)
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Voltage1 hysteresis x10 in Integer format"
+    ::= { input1 3 }
+	
+voltage1Description  OBJECT-TYPE
+    SYNTAX  DisplayString (SIZE (0..11))
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+        "Voltage1 description"
+    ::= { input1 4 }					
+	
+voltage2Min OBJECT-TYPE
+    SYNTAX Integer32 (0..600)
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Voltage2 minimum x10 in Integer format"
+    ::= { input2 1 }
+	
+voltage2Max OBJECT-TYPE
+    SYNTAX Integer32 (0..600)
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Voltage2 maximum x10 in Integer format"
+    ::= { input2 2 }
+
+voltage2Hyst OBJECT-TYPE
+    SYNTAX Integer32 (0..600)
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Voltage2 hysteresis x10 in Integer format"
+    ::= { input2 3 }
+
+voltage2Description  OBJECT-TYPE
+    SYNTAX  DisplayString (SIZE (0..11))
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+        "Voltage2 description"
+    ::= { input2 4 }
+		
+relay1ControlledBy OBJECT-TYPE
+    SYNTAX  INTEGER { manual(0), watchdog1(1), watchdog2(2) }
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Relay1 Control Item"
+    ::= { relay 1 }
+	
+relay2ControlledBy OBJECT-TYPE
+    SYNTAX  INTEGER { manual(0), watchdog1(1), watchdog2(2) }
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Relay2 Control Item"
+    ::= { relay 2 }
+	
+relayPulseWidth OBJECT-TYPE
+    SYNTAX Integer32 (1..253)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Relay Pulse Width"
+    ::= { relay 3 }
+
+relay1Description  OBJECT-TYPE
+    SYNTAX  DisplayString (SIZE (0..11))
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+        "Relay1 description"
+    ::= { relay 4 }
+
+relay2Description  OBJECT-TYPE
+    SYNTAX  DisplayString (SIZE (0..11))
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+        "Relay2 description"
+    ::= { relay 5 }
+	
+digitalInput1Description  OBJECT-TYPE
+    SYNTAX  DisplayString (SIZE (0..11))
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+        "Digital Input 1 description"
+    ::= { relay 6 }
+	
+digitalInput2Description  OBJECT-TYPE
+    SYNTAX  DisplayString (SIZE (0..11))
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION
+        "Digital Input 2 description"
+    ::= { relay 7 }
+	
+wdg1Mode OBJECT-TYPE
+    SYNTAX INTEGER { disabled(0), incomingPing(1), outgoingPing(2) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Watchdog1 Mode - Incomming or Outgoing Ping"
+    ::= { watchdog1 1 }
+	
+wdg1OutgoingPingInterval OBJECT-TYPE
+    SYNTAX Integer32 (1..253)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Watchdog1 Outgoing Ping Interval"
+    ::= { watchdog1 2 }
+	
+wdg1PingTimeOutForRestart OBJECT-TYPE
+    SYNTAX Integer32 (2..65000)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Watchdog1 Ping Time out for restart"
+    ::= { watchdog1 3 }
+	
+wdg1PingIPAddress OBJECT-TYPE
+    SYNTAX  IpAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Watchdog1 Ping IP address"
+    ::= { watchdog1 4 }
+	
+wdg1NumberOfRestarts OBJECT-TYPE
+    SYNTAX Integer32 (0..253)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Watchdog1 Max Number of restarts"
+    ::= { watchdog1  5 }
+
+wdg2Mode OBJECT-TYPE
+    SYNTAX INTEGER { disabled(0), incomingPing(1), outgoingPing(2) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Watchdog2 Mode - Incomming or Outgoing Ping"
+    ::= { watchdog2 1 }
+	
+wdg2OutgoingPingInterval OBJECT-TYPE
+    SYNTAX Integer32 (0..253)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Watchdog2 Outgoing Ping Interval"
+    ::= { watchdog2 2 }
+	
+wdg2PingTimeOutForRestart OBJECT-TYPE
+    SYNTAX Integer32 (2..65000)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Watchdog2 Ping Time out for restart"
+    ::= { watchdog2 3 }
+	
+wdg2PingIPAddress OBJECT-TYPE
+    SYNTAX  IpAddress
+    MAX-ACCESS  read-write
+    STATUS current
+    DESCRIPTION
+        "Watchdog2 Ping IP address"
+    ::= { watchdog2 4 }
+	
+wdg2NumberOfRestarts OBJECT-TYPE
+    SYNTAX Integer32 (0..253)
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Watchdog2 Max Number of restarts"
+    ::= { watchdog2  5 }
+	
+-- control   
+
+--relays								OBJECT IDENTIFIER ::=  { monitor 1 }
+--analogs								OBJECT IDENTIFIER ::=  { monitor 2 }
+--digitalInputs							OBJECT IDENTIFIER ::=  { monitor 3 }
+
+
+digitalInput1State OBJECT-TYPE
+    SYNTAX INTEGER { closed(0), open(1) }
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION 
+        "Digital1 Input State"
+    ::= { monitorNcontrol 1 }
+
+digitalInput2State OBJECT-TYPE
+    SYNTAX INTEGER { closed(0), open(1) }
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION 
+        "Digital2 Input State"
+    ::= { monitorNcontrol 2 }
+
+relay1State OBJECT-TYPE
+    SYNTAX  INTEGER { off(0), on(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Relay1 State"
+    ::= { monitorNcontrol 3 }
+
+relay1Pulse OBJECT-TYPE
+    SYNTAX  INTEGER { off(0), on(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Relay1 Pulse"
+    ::= { monitorNcontrol 4 }
+	
+relay2State OBJECT-TYPE
+    SYNTAX  INTEGER { off(0), on(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Relay2 State"
+    ::= { monitorNcontrol 5 }
+
+relay2Pulse OBJECT-TYPE
+    SYNTAX  INTEGER { off(0), on(1) }
+    MAX-ACCESS read-write
+    STATUS current
+    DESCRIPTION 
+        "Relay2 Pulse"
+    ::= { monitorNcontrol 6 }
+	
+	
+voltage1x10Int OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION 
+        "Voltage1 x10 in Integer format"
+    ::= { monitorNcontrol 7 }
+	
+voltage2x10Int OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION 
+        "Voltage2 x10 in Integer format"
+    ::= { monitorNcontrol 8 }
+	
+temp1x10Int OBJECT-TYPE
+	SYNTAX Integer32 (-400..1250)
+	MAX-ACCESS read-only
+	STATUS current
+	DESCRIPTION
+		"Temperature1 x10 in Integer format"
+	::= { monitorNcontrol 9 }
+	
+temp2x10Int OBJECT-TYPE
+	SYNTAX Integer32 (-400..1250)
+	MAX-ACCESS read-only
+	STATUS current
+	DESCRIPTION
+		"Temperature2 x10 in Integer format"
+	::= { monitorNcontrol 10 }
+  
+humi1x10Int OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION 
+        "Humidity1 x10 in Integer format"
+    ::= { monitorNcontrol 11 }
+	
+humi2x10Int OBJECT-TYPE
+    SYNTAX Integer32 (0..1000)
+    MAX-ACCESS read-only
+    STATUS current
+    DESCRIPTION 
+        "Humidity2 x10 in Integer format"
+    ::= { monitorNcontrol 12 }
+	
+-- inputs	
+
+--- configurationSaved
+configurationSaved OBJECT-TYPE
+	SYNTAX INTEGER { unsaved(0), saved(1) }
+	MAX-ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Configuration save status SAVED/UNSAVED"
+	::= { monitorNcontrol 13 }
+
+restartDevice OBJECT-TYPE
+	SYNTAX INTEGER { cancel(0), restart(1) }
+	MAX-ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Restart Device"
+	::= { monitorNcontrol 14 }
+	
+temperatureUnits OBJECT-TYPE
+	SYNTAX INTEGER {  celsius(0), fahrenheit(1) }
+	MAX-ACCESS read-write
+	STATUS current
+	DESCRIPTION
+		"Temperature Units"
+	::= { monitorNcontrol 15 }
+
+openSockets OBJECT-TYPE
+    SYNTAX  INTEGER (0..255)
+    MAX-ACCESS  read-only
+    STATUS current
+    DESCRIPTION
+        "Open sockets"
+    ::= { monitorNcontrol 16 }
+	
+httpSocket1 OBJECT-TYPE
+    SYNTAX  Integer32
+    MAX-ACCESS  read-only
+    STATUS current
+    DESCRIPTION
+        "HTTP socket 1"
+    ::= { monitorNcontrol 17 }
+		
+httpSocket2 OBJECT-TYPE
+    SYNTAX  Integer32
+    MAX-ACCESS  read-only
+    STATUS current
+    DESCRIPTION
+        "HTTP socket 2"
+    ::= { monitorNcontrol 18 }
+	
+httpSocketIp1 OBJECT-TYPE
+    SYNTAX  IpAddress
+    MAX-ACCESS  read-only
+    STATUS current
+    DESCRIPTION
+        "HTTP socket 1 IP address"
+    ::= { monitorNcontrol 19 }
+	
+httpSocketIp2 OBJECT-TYPE
+    SYNTAX  IpAddress
+    MAX-ACCESS  read-only
+    STATUS current
+    DESCRIPTION
+        "HTTP socket 2 IP address"
+    ::= { monitorNcontrol 20 }
+   
+snmp-trap-notification NOTIFICATION-TYPE
+	OBJECTS { digitalInput1State,digitalInput2State,voltage1x10Int,voltage2x10Int,temp1x10Int,temp2x10Int,humi1x10Int,humi2x10Int,restartDevice}
+	STATUS current
+	DESCRIPTION 
+		"SMIV2 Trap notification information for the SNMP Manager."
+	::= {trapNotifications 1}
+
+tcw122bMIBCompliances1 MODULE-COMPLIANCE
+    STATUS  current
+	DESCRIPTION
+            "This group is for SNMP applications."
+    MODULE  -- this module
+        MANDATORY-GROUPS { tcw122bProductGroup, tcw122bSetupGroup, tcw122bMonitorGroup, tcw122bTrapGroup}
+    ::= { tcw122bMIBCompliances 1 }
+	
+tcw122bProductGroup OBJECT-GROUP
+    OBJECTS {name, version, date}
+	STATUS  current
+    DESCRIPTION
+            "A collection of objects providing basic product info."
+    ::= { tcw122bMIBGroups 1 }
+
+tcw122bSetupGroup OBJECT-GROUP
+    OBJECTS {	deviceIPAddress, subnetMask, gateway, deviceMACAddress, dhcpConfig, dns, hostName,
+				filterMACAddress1, filterMACEnable1, filterMACAddress2, filterMACEnable2, filterMACAddress3, filterMACEnable3,
+				vlanStatus, vlanId, 
+				snmpConfiguration, trapEnabled, trapReceiverIPAddress, trapCommunity, trapInterval, maxNumberOfTraps,
+				temperature1Min, temperature1Max, temperature1Hyst, 
+				humidity1Min, humidity1Max, humidity1Hyst,
+				temperature2Min, temperature2Max, temperature2Hyst,
+				humidity2Min, humidity2Max, humidity2Hyst, 
+				voltage1Min, voltage1Max, voltage1Hyst,
+				voltage2Min, voltage2Max, voltage2Hyst,
+				relay1ControlledBy, relay2ControlledBy, relayPulseWidth,
+				wdg1Mode, wdg1OutgoingPingInterval, wdg1PingTimeOutForRestart, wdg1PingIPAddress, wdg1NumberOfRestarts,
+				wdg2Mode, wdg2OutgoingPingInterval, wdg2PingTimeOutForRestart, wdg2PingIPAddress, wdg2NumberOfRestarts
+			}
+    STATUS  current
+    DESCRIPTION
+            "A collection of objects providing basic setup."
+    ::= { tcw122bMIBGroups 2 }	
+	
+tcw122bMonitorGroup OBJECT-GROUP
+    OBJECTS {	digitalInput1State, digitalInput2State,
+				relay1State, relay1Pulse, relay2State, relay2Pulse,
+				voltage1x10Int, voltage2x10Int, 
+				temp1x10Int, temp2x10Int,
+				humi1x10Int, humi2x10Int,
+				configurationSaved, restartDevice, temperatureUnits
+			}
+    STATUS  current
+    DESCRIPTION
+            "A collection of objects providing basic monitoring
+            and control of a product."
+    ::= { tcw122bMIBGroups 3 }	
+	
+tcw122bTrapGroup NOTIFICATION-GROUP
+    NOTIFICATIONS  {snmp-trap-notification}
+    STATUS  current
+    DESCRIPTION
+            "SNMP Trap Notification object."
+    ::= { tcw122bMIBGroups 4 }	
+
+END
